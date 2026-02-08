@@ -92,14 +92,25 @@ else
     echo -e "${RED}[✗]${NC} anew installation failed"
 fi
 
-# Install Shodan
+# Install Python dependencies
 echo ""
 echo "=============================================="
-echo "   Installing Shodan CLI"
+echo "   Installing Python Dependencies"
 echo "=============================================="
 echo ""
 
-echo "[*] Installing Shodan..."
+echo "[*] Installing Python requirements..."
+pip install --break-system-packages -r requirements.txt 2>/dev/null || pip install -r requirements.txt
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[✓]${NC} Python dependencies installed"
+else
+    echo -e "${RED}[✗]${NC} Python dependencies installation failed"
+fi
+
+# Install Shodan
+echo ""
+echo "[*] Installing Shodan CLI..."
 pip install shodan --break-system-packages 2>/dev/null || pip install shodan
 
 if [ $? -eq 0 ]; then
@@ -127,7 +138,8 @@ echo ""
 echo -e "${GREEN}[✓]${NC} All tools installed"
 echo ""
 echo "Next steps:"
-echo "1. Configure your API keys in config.py"
+echo "1. Copy .env.example to .env and add your API keys"
+echo "   cp .env.example .env"
 echo "2. Initialize Shodan: shodan init YOUR_API_KEY"
 echo "3. Run validation: python3 config.py"
 echo "4. Start scanning: python3 main.py -u example.com"
